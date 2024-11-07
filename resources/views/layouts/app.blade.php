@@ -12,7 +12,7 @@
 
 </head>
 <body>
-    <div class="min-h-screen bg-Sky-950">
+    <div class="min-h-screen bg-slate-950 ">
         @yield('content')
     </div>
 
