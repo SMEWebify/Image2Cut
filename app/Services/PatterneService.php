@@ -27,7 +27,7 @@ class PatterneService
         $this->filterService  = $filterService ;
     }
 
-    public function generatePattern($partSizeX, $numberOfTools, $minToolDiameter, $maxToolDiameter, $imagePath, $shape, $fade, $alignment = 'straight', $angle = null, $ignoreThreshold, $exportDXF=false)
+    public function generatePattern($partSizeX, $numberOfTools, $minToolDiameter, $maxToolDiameter, $imagePath, $shape, $fade, $alignment = 'straight', $angle = null, $ignoreThreshold, $espace, $exportDXF=false)
     {
         // Détecter le type MIME de l'image d'entrée pour obtenir les dimensions
         $imageInfo = getimagesize($imagePath);
@@ -90,7 +90,7 @@ class PatterneService
         //}
 
         // Variables pour ajuster la densité du motif
-        $spacing = 10; // Espace entre chaque forme
+        $spacing = $espace; // Espace entre chaque forme
 
         for ($y = 0; $y < imagesy($resizedImage); $y += $spacing) {
             // Vérification du mode d'alignement
@@ -148,7 +148,6 @@ class PatterneService
         // Sauvegarder l'image nouvellement créée
         $uuid = Str::uuid(); // Generate a UUID
         $outputPath = public_path('patterns/' . $uuid . '.png'); 
-        $imageUrl = asset('patterns/' . $uuid . '.png');
         $imageUrl = asset('patterns/' . $uuid . '.png');
         imagepng($newImage, $outputPath);
     

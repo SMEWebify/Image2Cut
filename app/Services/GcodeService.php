@@ -31,7 +31,7 @@ class GcodeService
     }
 
     // Dessine une forme à une position donnée dans le fichier Gcode
-    public function drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, $positions, $angle = null, $ignoreThreshold)
+    public function drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold)
     {
         // Vérifier que $x et $y sont dans les limites de l'image redimensionnée
         if ($x >= imagesx($resizedImage) || $y >= imagesy($resizedImage)) {

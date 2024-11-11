@@ -42,6 +42,7 @@ class MetalCuttingController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Upload image
             'shape' => 'required|in:circle,square,rectangle,triangle,random',
             'angle' => 'required|numeric|min:0|max:360',
+            'espace' => 'required|numeric|min:2|gt:max_tool_diameter',
             'ignoreThreshold' => 'required|numeric|min:0|max:100',
             'alignment' => 'required|in:straight,diagonal' 
         ]);
@@ -52,6 +53,7 @@ class MetalCuttingController extends Controller
         $maxToolDiameter = $request->input('max_tool_diameter');
         $shape = $request->input('shape');
         $angle = $request->input('angle');
+        $espace = $request->input('espace');
         $fade = $request->has('fade');
         $ignoreThreshold = $request->input('ignoreThreshold');
         $alignment = $request->input('alignment');
@@ -73,7 +75,7 @@ class MetalCuttingController extends Controller
             $gcodeFilename = asset('storage/uploads/' . $imageBaseName .'.nc');
 
             // Générer le motif avec l'image sauvegardée
-            $result =  $this->patterneService->generatePattern(  $part_size_x, $numberOfTools, $minToolDiameter, $maxToolDiameter, $fullImagePath, $shape, $fade,  $alignment, $angle, $ignoreThreshold);
+            $result =  $this->patterneService->generatePattern(  $part_size_x, $numberOfTools, $minToolDiameter, $maxToolDiameter, $fullImagePath, $shape, $fade,  $alignment, $angle, $ignoreThreshold, $espace);
             
             // Chemin de l'image générée
             $imagePath = $result['imagePath'];
@@ -98,6 +100,7 @@ class MetalCuttingController extends Controller
                                 ->with('hitcount', $hitcount)
                                 ->with('shape', $shape)
                                 ->with('angle', $angle) 
+                                ->with('espace', $espace) 
                                 ->with('fade', $fade) 
                                 ->with('ignoreThreshold', $ignoreThreshold) 
                                 ->with('partSizeY', $partSizeY) 

@@ -19,6 +19,7 @@
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "@tailwindcss/typography": "^0.5.15",
         "dropzone": "^6.0.0-beta.2",
-        "lodash": "^4.17.21"
+        "lodash": "^4.17.21",
+        "lts": "^2.0.0"
     }
 }

@@ -14,7 +14,7 @@
                 <label for="part_size_x" class="block text-sm font-medium text-slate-100">Taille de la pièce (X) en mm :</label>
                 <input type="number" name="part_size_x" id="part_size_x" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('part_size_x', session('part_size_x', 500)) }}" required>
                 @error('part_size_x')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -38,14 +38,21 @@
                     <option value="random" @if(old('shape', session('shape')) == 'random') selected @endif>Random</option>
                 </select>
                 @error('shape')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
             <div>
                 <label for="angle" class="block text-sm font-medium text-slate-100">Angle (°) :</label>
                 <input type="number" name="angle" id="angle" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('angle', session('angle', 0)) }}" required>
                 @error('angle')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
+                <label for="espace" class="block text-sm font-medium text-slate-100">Espace :</label>
+                <input type="number" name="espace" id="espace" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('espace', session('espace', 11)) }}" required>
+                @error('espace')
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
         </div>
@@ -57,7 +64,7 @@
                 <label for="number_of_tools" class="block text-sm font-medium text-slate-100">Nombre d'outils différents:</label>
                 <input type="number" name="number_of_tools" id="number_of_tools" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('number_of_tools', session('number_of_tools', 3)) }}" required>
                 @error('number_of_tools')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -66,7 +73,7 @@
                 <label for="min_tool_diameter" class="block text-sm font-medium text-slate-100">Diamètre minimum de l'outil (mm) :</label>
                 <input type="number" name="min_tool_diameter" id="min_tool_diameter" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('min_tool_diameter', session('min_tool_diameter', 2)) }}" required>
                 @error('min_tool_diameter')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
         
@@ -75,7 +82,7 @@
                 <label for="max_tool_diameter" class="block text-sm font-medium text-slate-100">Diamètre maximum de l'outil (mm) :</label>
                 <input type="number" name="max_tool_diameter" id="max_tool_diameter" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('max_tool_diameter', session('max_tool_diameter', 10)) }}" required>
                 @error('max_tool_diameter')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
         </div>
@@ -124,7 +131,7 @@
                 [&::-moz-range-track]:bg-gray-100
                 [&::-moz-range-track]:rounded-full" id="ignoreThreshold" name="ignoreThreshold" aria-orientation="horizontal" value="{{ old('ignoreThreshold', session('ignoreThreshold', 10)) }}" min="0" max="100">
                 @error('ignoreThreshold')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -136,7 +143,7 @@
                     <option value="diagonal" @if(old('alignment', session('alignment')) == 'diagonal') selected @endif>Alignement diagonal (45°)</option>
                 </select>
                 @error('alignment')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
         </div>
@@ -146,7 +153,7 @@
             <label for="image" class="block text-sm font-medium text-slate-100">Télécharger l'image à découper :</label>
             <input type="file" name="image" id="image" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" required>
             @error('image')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
 <!--

@@ -29,7 +29,7 @@ class DxfService
     }
 
     // Dessine une forme à une position donnée dans le fichier DXF
-    public function drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, $positions, $angle = null, $ignoreThreshold)
+    public function drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold)
     {
         // Vérifier que $x et $y sont dans les limites de l'image redimensionnée
         if ($x >= imagesx($resizedImage) || $y >= imagesy($resizedImage)) {

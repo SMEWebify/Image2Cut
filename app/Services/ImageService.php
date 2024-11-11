@@ -12,7 +12,7 @@ class ImageService
         $this->functionService  = $functionService ;
     }
 
-    public function drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, $positions, $angle = null, $ignoreThreshold) {
+    public function drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold) {
         
         // Vérifier que $x et $y sont dans les limites de l'image redimensionnée
         if ($x >= imagesx($resizedImage) || $y >= imagesy($resizedImage)) {
@@ -68,9 +68,9 @@ class ImageService
                 break;
             case 'triangle':
                 $points = [
-                    $toolSize, 0, // Sommet supérieur
-                    0, $toolSize * 2, // Coin inférieur gauche
-                    $toolSize * 2, $toolSize * 2 // Coin inférieur droit
+                    $toolSize/2, 0, // Sommet supérieur
+                    0, $toolSize , // Coin inférieur gauche
+                    $toolSize, $toolSize  // Coin inférieur droit
                 ];
                 imagefilledpolygon($tempImage, $points, 3, $white);
                 break;
