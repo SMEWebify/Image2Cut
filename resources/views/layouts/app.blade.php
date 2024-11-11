@@ -18,6 +18,8 @@
 
         <!-- JavaScript -->
         <script type="module" src="{{ Vite::asset('resources/js/app.js') }}"></script>
+        <script type="module" src="{{ Vite::asset('node_modules/lodash/lodash.min.js') }}"></script>
+        <script type="module" src="{{ Vite::asset('node_modules/dropzone/dist/dropzone-min.js') }}"></script>
 
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1279966095557282"
      crossorigin="anonymous"></script>
@@ -27,10 +29,5 @@
         <div >
             @yield('content')
         </div>
-
-        <!-- Ajouter des scripts JavaScript ici -->
-        <script src="{{ asset('js/app.js') }}"></script>
-        <script src="{{ asset('js/lodash.min.js') }}"></script>
-        <script src="{{ asset('js/dropzone-min.js') }}"></script>
     </body>
 </html>

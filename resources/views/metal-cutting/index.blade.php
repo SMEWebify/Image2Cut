@@ -265,20 +265,6 @@
             <button type="submit" class="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400">Générer le motif</button>
         </div>
     </form>
-    <div align="center">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1279966095557282"
-        crossorigin="anonymous"></script>
-        <!-- Tempo -->
-        <ins class="adsbygoogle"
-            style="display:block"
-            data-ad-client="ca-pub-1279966095557282"
-            data-ad-slot="8185039017"
-            data-ad-format="auto"
-            data-full-width-responsive="true"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
     
     <div class="container mx-auto py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
