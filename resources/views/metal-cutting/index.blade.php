@@ -236,72 +236,96 @@
             <button type="submit" class="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400">Générer le motif</button>
         </div>
     </form>
+    <div align="center">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1279966095557282"
+        crossorigin="anonymous"></script>
+        <!-- Tempo -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1279966095557282"
+            data-ad-slot="8185039017"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
     
-
     <div class="container mx-auto py-8">
-        <!-- Message de succès -->
-        @if(session('success'))
-            <div class="bg-lime-500 text-lime-700 p-4 rounded-lg border border-lime-300 shadow-sm mb-6">
-                <p class="text-lg font-medium">{{ session('success') }}</p>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div>
+                <!-- Message de succès -->
+                @if(session('success'))
+                    <div class="bg-lime-500 text-lime-700 p-4 rounded-lg border border-lime-300 shadow-sm mb-6">
+                        <p class="text-lg font-medium">{{ session('success') }}</p>
+                    </div>
+                @endif
+                @if(session('hitcount'))
+                    <div class="bg-slate-600 p-4 rounded-lg  border border-gray-200 mb-6 shadow-sm">
+                        <p class="text-lg font-medium">{{ session('hitcount') }} Coups</p>
+                    </div>
+                @endif
             </div>
-        @endif
-        @if(session('hitcount'))
-            <div class="bg-slate-600 p-4 rounded-lg  border border-gray-200 mb-6 shadow-sm">
-                <p class="text-lg font-medium">{{ session('hitcount') }} Coups</p>
+
+            <!-- Liste des outils générés -->
+            @if(session('generateTools'))
+            <div class="bg-slate-600 p-4 rounded-lg border border-gray-200 mb-6 shadow-sm">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">Outils générés :</h2>
+                <ul class="list-disc pl-5 text-gray-700">
+                    @foreach(session('generateTools') as $tool)
+                        <li class="py-1">{{ session('shape') }} {{ $tool }}</li>
+                    @endforeach
+                </ul>
             </div>
-        @endif
-        
-    
-        <div class="container mx-auto py-8">
+            @endif
+
             <!-- Liste des outils utilisés -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Liste des outils générés -->
-                @if(session('generateTools'))
-                <div class="bg-slate-500 p-4 rounded-lg border border-gray-200 mb-6 shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-800 mb-2">Outils générés :</h2>
+            @if(session('usedTools'))
+                <div class="bg-slate-600 p-4 rounded-lg border border-gray-200 mb-6 shadow-sm">
+                    <h2 class="text-lg font-bold text-slate-800 mb-2">Outils utilisés :</h2>
                     <ul class="list-disc pl-5 text-gray-700">
-                        @foreach(session('generateTools') as $tool)
+                        @foreach(session('usedTools') as $tool)
                             <li class="py-1">{{ session('shape') }} {{ $tool }}</li>
                         @endforeach
                     </ul>
                 </div>
-                @endif
-
-                <!-- Grille à deux colonnes -->
-                @if(session('usedTools'))
-                    <div class="bg-slate-500 p-4 rounded-lg border border-gray-200 mb-6 shadow-sm">
-                        <h2 class="text-lg font-bold text-slate-800 mb-2">Outils utilisés :</h2>
-                        <ul class="list-disc pl-5 text-gray-700">
-                            @foreach(session('usedTools') as $tool)
-                                <li class="py-1">{{ session('shape') }} {{ $tool }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Affichage de l'image originale -->
-                @if(session('originalImageUrl'))
-                <div class="text-center">
-                    <h2 class="text-xl font-bold text-slate-100 mb-4">Image originale :</h2>
-                    <div class="inline-block">
-                        <!-- Assurez-vous de remplacer "image" par l'URL de votre image originale -->
-                        <img src="{{ session('originalImageUrl') }}" alt="Original image" class="border border-gray-300 shadow-lg rounded-lg">
-                    </div>
-                </div>
-                @endif
-
-                <!-- Affichage de l'image générée -->
-                @if(session('imageUrl'))
-                <div class="text-center">
-                    <h2 class="text-xl font-bold text-slate-100 mb-4">Image générée :</h2>
-                    <div class="inline-block">
-                        <img src="{{ session('imageUrl') }}" alt="Generated pattern" class="border border-gray-300 shadow-lg rounded-lg">
-                    </div>
-                </div>
-                @endif
-            </div>
+            @endif
         </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            <!-- Affichage de l'image originale -->
+            @if(session('originalImageUrl'))
+            <div class="text-center">
+                <h2 class="text-xl font-bold text-slate-100 mb-4">Image originale :</h2>
+                <div class="inline-block">
+                    <!-- Assurez-vous de remplacer "image" par l'URL de votre image originale -->
+                    <img src="{{ session('originalImageUrl') }}" alt="Original image" class="border border-gray-300 shadow-lg rounded-lg">
+                </div>
+            </div>
+            @endif
+            
+            @if(session('imageUrl'))
+            <div class="text-center flex flex-col  space-y-4">
+                <!-- Bouton de téléchargement pour le fichier DXF -->
+                <a href="{{ session('dxfPath') }}" download class="inline-block px-4 py-2 bg-slate-800 text-white font-semibold rounded-md shadow hover:bg-lime-600 transition">
+                    Télécharger le fichier DXF
+                </a>
+                
+                <!-- Bouton de téléchargement pour le fichier NC -->
+                <a href="{{ session('gcodePath') }}" download class="inline-block px-4 py-2 bg-slate-900 text-white font-semibold rounded-md shadow hover:bg-lime-600 transition">
+                    Télécharger le fichier NC
+                </a>
+            </div>
+
+            <!-- Affichage de l'image générée -->
+            
+            <div class="text-center">
+                <h2 class="text-xl font-bold text-slate-100 mb-4">Image générée :</h2>
+                <div class="inline-block">
+                    <img src="{{ session('imageUrl') }}" alt="Generated pattern" class="border border-gray-300 shadow-lg rounded-lg">
+                </div>
+            </div>
+            @endif
+        </div>
+    </div>
 </div>
 @endsection

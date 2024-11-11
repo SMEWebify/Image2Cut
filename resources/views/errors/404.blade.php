@@ -74,11 +74,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Image2Cut</h1>
-        <p>Votre générateur de modèles de découpe de personnalisés</p>
-        <a href="/">
-            <button class="enter-btn">Enter</button>
-        </a>
+        <h1>404 - Image2Cut</h1>
+        <p>Oups, il semble qu'il y ait eu un problème.</p>
+        <p>Nous travaillons pour résoudre cela. Vous pouvez <a href="{{ url('/') }}"  class="github-link">revenir à la page d'accueil</a>.</p>
+        <p>Si le problème persiste, veuillez contacter l'assistance.</p>
         <a href="https://github.com/SMEWebify/Image2Cut" class="github-link" target="_blank">Voir sur GitHub</a>
     </div>
 </body>

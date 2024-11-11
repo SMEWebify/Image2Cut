@@ -18,6 +18,10 @@
 
         <!-- JavaScript -->
         <script type="module" src="{{ Vite::asset('resources/js/app.js') }}"></script>
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1279966095557282"
+     crossorigin="anonymous"></script>
+
     </head>
     <body class=" bg-slate-500 ">
         <div >

@@ -74,13 +74,13 @@ class GcodeService
         switch ($shape) {
             case 'circle':
                 $radius = $toolSize / 2;
-                $this->writeCircleToGcode($x, $y, $radius, $angle);
+                $this->writeCircleToGcode($x, -$y, $radius, $angle);
                 break;
             case 'square':
-                $this->writeSquareToGcode($x, $y, $toolSize, $angle);
+                $this->writeSquareToGcode($x, -$y, $toolSize, $angle);
                 break;
             case 'triangle':
-                $this->writeTriangleToGcode($x, $y, $toolSize, $angle);
+                $this->writeTriangleToGcode($x, -$y, $toolSize, $angle);
                 break;
         }
         

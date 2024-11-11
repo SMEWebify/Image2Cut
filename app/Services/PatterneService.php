@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
 use App\Services\ImageService;
 use App\Services\FunctionService;
 
@@ -78,12 +79,12 @@ class PatterneService
         $usedTools = [];
 
         // Initialiser le fichier DXF si export activé
-        
-        $dxfFilename = $imagePath . '.dxf';
+        $imageBaseName = pathinfo($imagePath, PATHINFO_FILENAME); 
+        $dxfFilename = storage_path('app/public/uploads/' . pathinfo($imageBaseName, PATHINFO_FILENAME) . '.dxf');
         //if ($exportDXF && $dxfFilename) {
             $this->dxfService->saveDXFFile($dxfFilename);
         //}
-        $gcodeFilename = $imagePath . 'nc';
+        $gcodeFilename = storage_path('app/public/uploads/' . pathinfo($imageBaseName, PATHINFO_FILENAME) . '.nc');
         //if ($exportDXF && $dxfFilename) {
             $this->gcodeService->saveGcodeFile($gcodeFilename);
         //}
@@ -145,7 +146,10 @@ class PatterneService
         }
         
         // Sauvegarder l'image nouvellement créée
-        $outputPath = public_path('patterns/generated-pattern.png');
+        $uuid = Str::uuid(); // Generate a UUID
+        $outputPath = public_path('patterns/' . $uuid . '.png'); 
+        $imageUrl = asset('patterns/' . $uuid . '.png');
+        $imageUrl = asset('patterns/' . $uuid . '.png');
         imagepng($newImage, $outputPath);
     
         // Fermer le fichier DXF et Gcode
@@ -159,7 +163,9 @@ class PatterneService
     
         // Retourner le chemin de l'image générée et la liste des outils utilisés
         return [
-            'imagePath' => $outputPath,
+            'imagePath' => $imageUrl,
+            'dxfPath' => $dxfFilename,
+            'gcodePath' => $gcodeFilename,
             'usedTools' => $usedTools,
             'toolSizes' => $toolSizes,
             'hitcount' => $hitcount,

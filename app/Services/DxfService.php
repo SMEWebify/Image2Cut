@@ -72,13 +72,13 @@ class DxfService
         switch ($shape) {
             case 'circle':
                 $radius = $toolSize / 2;
-                $this->writeCircleToDXF($x, $y, $radius, $angle);
+                $this->writeCircleToDXF($x, -$y, $radius, $angle);
                 break;
             case 'square':
-                $this->writeSquareToDXF($x, $y, $toolSize, $angle);
+                $this->writeSquareToDXF($x, -$y, $toolSize, $angle);
                 break;
             case 'triangle':
-                $this->writeTriangleeToDXF($x, $y, $toolSize, $angle);
+                $this->writeTriangleeToDXF($x, -$y, $toolSize, $angle);
                 break;
         }
         
