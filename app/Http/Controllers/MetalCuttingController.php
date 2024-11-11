@@ -44,7 +44,8 @@ class MetalCuttingController extends Controller
             'angle' => 'required|numeric|min:0|max:360',
             'espace' => 'required|numeric|min:2|gt:max_tool_diameter',
             'ignoreThreshold' => 'required|numeric|min:0|max:100',
-            'alignment' => 'required|in:straight,diagonal' 
+            'alignment' => 'required|in:straight,diagonal' ,
+            'pen' => 'required|integer|between:1,16',
         ]);
 
         $part_size_x = $request->input('part_size_x');
@@ -57,6 +58,7 @@ class MetalCuttingController extends Controller
         $fade = $request->has('fade');
         $ignoreThreshold = $request->input('ignoreThreshold');
         $alignment = $request->input('alignment');
+        $pen = $request->input('pen');
         
         // Vérifier si une image a été uploadée
         if ($request->hasFile('image')) {
@@ -75,7 +77,20 @@ class MetalCuttingController extends Controller
             $gcodeFilename = asset('storage/uploads/' . $imageBaseName .'.nc');
 
             // Générer le motif avec l'image sauvegardée
-            $result =  $this->patterneService->generatePattern(  $part_size_x, $numberOfTools, $minToolDiameter, $maxToolDiameter, $fullImagePath, $shape, $fade,  $alignment, $angle, $ignoreThreshold, $espace);
+            $result =  $this->patterneService->generatePattern(  
+                                                            $part_size_x, 
+                                                            $numberOfTools, 
+                                                            $minToolDiameter,
+                                                            $maxToolDiameter, 
+                                                            $fullImagePath, 
+                                                            $shape, 
+                                                            $fade,  
+                                                            $alignment, 
+                                                            $angle, 
+                                                            $ignoreThreshold, 
+                                                            $espace,
+                                                            $pen
+                                                        );
             
             // Chemin de l'image générée
             $imagePath = $result['imagePath'];
@@ -104,6 +119,7 @@ class MetalCuttingController extends Controller
                                 ->with('fade', $fade) 
                                 ->with('ignoreThreshold', $ignoreThreshold) 
                                 ->with('partSizeY', $partSizeY) 
+                                ->with('pen', $pen) 
                                 ->with('success', 'Image processée avec succès.')
                                 ->with('imageUrl', $result['imagePath'])
                                 ->with('dxfPath', $dxfFilename)

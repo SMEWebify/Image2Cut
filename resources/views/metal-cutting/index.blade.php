@@ -43,14 +43,16 @@
             </div>
             <div>
                 <label for="angle" class="block text-sm font-medium text-slate-100">Angle (°) :</label>
-                <input type="number" name="angle" id="angle" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('angle', session('angle', 0)) }}" required>
+                <input type="number" name="angle" id="angle" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('angle', session('angle', 0)) }}" min="0" max="360" required>
                 @error('angle')
                     <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
+
+            <!-- Espace entre deux formes-->
             <div>
                 <label for="espace" class="block text-sm font-medium text-slate-100">Espace :</label>
-                <input type="number" name="espace" id="espace" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('espace', session('espace', 11)) }}" required>
+                <input type="number" name="espace" id="espace" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('espace', session('espace', 11)) }}" min="2"  required>
                 @error('espace')
                     <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -62,7 +64,7 @@
             <!-- Nombre d'outils -->
             <div>
                 <label for="number_of_tools" class="block text-sm font-medium text-slate-100">Nombre d'outils différents:</label>
-                <input type="number" name="number_of_tools" id="number_of_tools" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('number_of_tools', session('number_of_tools', 3)) }}" required>
+                <input type="number" name="number_of_tools" id="number_of_tools" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('number_of_tools', session('number_of_tools', 3)) }}" min="1"  required>
                 @error('number_of_tools')
                     <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -93,7 +95,7 @@
                 <label for="fade" class="text-sm font-medium text-slate-100">Activer le fondu de gauche à droite</label>
             </div>
 
-            <!-- Diamètre maximum de l'outil -->
+            <!-- Profondeur de seuil -->
             <div>
                 <label for="ignoreThreshold" class="block text-sm font-medium text-slate-100">Niveau de seuil ignoré :</label>
                 <input type="range" class="w-full bg-transparent cursor-pointer appearance-none disabled:opacity-50 disabled:pointer-events-none focus:outline-none
@@ -143,6 +145,17 @@
                     <option value="diagonal" @if(old('alignment', session('alignment')) == 'diagonal') selected @endif>Alignement diagonal (45°)</option>
                 </select>
                 @error('alignment')
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Couleur de sortie du dxf -->
+            <div>
+                <label for="pen" class="block text-sm font-medium text-slate-100">Couleur du dxf (1-16) :</label>
+                <input type="number" name="pen" id="pen" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('pen', session('pen', 8)) }}" required min="1" max="16">
+                @error('pen')
                     <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>

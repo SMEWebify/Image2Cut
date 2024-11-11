@@ -29,7 +29,7 @@ class DxfService
     }
 
     // Dessine une forme à une position donnée dans le fichier DXF
-    public function drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold)
+    public function drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold, $pen)
     {
         // Vérifier que $x et $y sont dans les limites de l'image redimensionnée
         if ($x >= imagesx($resizedImage) || $y >= imagesy($resizedImage)) {
@@ -72,13 +72,13 @@ class DxfService
         switch ($shape) {
             case 'circle':
                 $radius = $toolSize / 2;
-                $this->writeCircleToDXF($x, -$y, $radius, $angle);
+                $this->writeCircleToDXF($x, -$y, $radius, $angle, $pen);
                 break;
             case 'square':
-                $this->writeSquareToDXF($x, -$y, $toolSize, $angle);
+                $this->writeSquareToDXF($x, -$y, $toolSize, $angle, $pen);
                 break;
             case 'triangle':
-                $this->writeTriangleeToDXF($x, -$y, $toolSize, $angle);
+                $this->writeTriangleeToDXF($x, -$y, $toolSize, $angle, $pen);
                 break;
         }
         
@@ -91,13 +91,13 @@ class DxfService
 
 
     // Fonction pour écrire un cercle dans le fichier DXF (tracé d'un cercle)
-    private function writeCircleToDXF($x, $y, $radius, $angle = null)
+    private function writeCircleToDXF($x, $y, $radius, $angle = null, $pen)
     {
         // Écrire les entités DXF pour un cercle (avec une position et un rayon)
         fwrite($this->dxfFile, "0\nCIRCLE\n");
         fwrite($this->dxfFile, "8\n0\n"); // Layer 0
         fwrite($this->dxfFile, "6\nCONTINUOUS\n"); // Style de ligne "CONTINUOUS"
-        fwrite($this->dxfFile, "62\n1\n"); // Code couleur, ici 1 correspond à la couleur rouge (selon le standard DXF)
+        fwrite($this->dxfFile, "62\n" . $pen ."\n"); // Code couleur, ici 1 correspond à la couleur rouge (selon le standard DXF)
         fwrite($this->dxfFile, "10\n" . $x . "\n"); // Coordonnée X
         fwrite($this->dxfFile, "20\n" . $y . "\n"); // Coordonnée Y
         fwrite($this->dxfFile, "30\n0.0\n"); // Coordonnée Z (0 pour un plan 2D)
@@ -105,7 +105,7 @@ class DxfService
         fwrite($this->dxfFile, "0"); // Fin de l'entité
     }
 
-    private function writeSquareToDXF($x, $y, $size, $angle) {
+    private function writeSquareToDXF($x, $y, $size, $angle, $pen) {
         // Génère un carré au format DXF (les coordonnées des 4 points après rotation)
         $halfSize = $size / 2;
     
@@ -118,10 +118,10 @@ class DxfService
             ['x' => $x - $halfSize, 'y' => $y - $halfSize],
         ], $x, $y, $angle);
     
-        return $this->generateDXFPolygon($points);
+        return $this->generateDXFPolygon($points, $pen);
     }
 
-    private function  writeTriangleeToDXF($x, $y, $size, $angle) {
+    private function  writeTriangleeToDXF($x, $y, $size, $angle, $pen) {
         // Génère un triangle au format DXF (les coordonnées des 3 points après rotation)
         $halfSize = $size / 2;
         $points = [
@@ -133,12 +133,12 @@ class DxfService
     
         $rotatedPoints = $this->rotatePoints($points, $x, $y, $angle);
     
-        return $this->generateDXFPolygon($rotatedPoints);
+        return $this->generateDXFPolygon($rotatedPoints, $pen);
     }
 
-    private function generateDXFPolygon($points) {
+    private function generateDXFPolygon($points, $pen) {
         // Génère un polygone DXF à partir d'une liste de points
-        $dxfData = "0\nPOLYLINE\n8\n0\n66\n1\n";
+        $dxfData = "0\nPOLYLINE\n8\n0\n66\n1\n62\n{$pen}\n";
         foreach ($points as $point) {
             $dxfData .= "0\nVERTEX\n8\n0\n10\n{$point['x']}\n20\n{$point['y']}\n30\n0.0\n";
         }
