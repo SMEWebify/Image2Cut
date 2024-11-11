@@ -31,6 +31,7 @@ class DxfService
     // Dessine une forme à une position donnée dans le fichier DXF
     public function drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold, $pen)
     {
+
         // Vérifier que $x et $y sont dans les limites de l'image redimensionnée
         if ($x >= imagesx($resizedImage) || $y >= imagesy($resizedImage)) {
             return; // Si $x ou $y sont hors limites, on retourne sans dessiner
@@ -42,20 +43,20 @@ class DxfService
         if ($grayValue < $ignoreThreshold) {
             return;
         }
-
+    
         // Mapper la nuance de gris sur une taille d'outil dans le tableau généré
         $toolSize = $this->functionService->mapGrayToToolSize($grayValue, $toolSizes);
-        
+    
         // Vérifier si l'outil est trop proche des bords pour éviter de dessiner hors de l'image
         if ($x - $toolSize / 2 < 0 || $x + $toolSize / 2 > imagesx($resizedImage) || $y - $toolSize / 2 < 0 || $y + $toolSize / 2 > imagesy($resizedImage)) {
             return;
         }
-
+    
         // Vérifier si l'outil chevauche une forme déjà dessinée
         if ($this->functionService->isOverlapping($x, $y, $toolSize, $positions)) {
             return;
         }
-
+    
         // Si le mode "random" est activé, choisir une forme et un angle aléatoire
         if ($shape === 'random') {
             $shapes = ['circle', 'square', 'triangle'];
@@ -70,6 +71,7 @@ class DxfService
 
         // Ajouter la forme dans le fichier DXF
         switch ($shape) {
+        
             case 'circle':
                 $radius = $toolSize / 2;
                 $this->writeCircleToDXF($x, -$y, $radius, $angle, $pen);
