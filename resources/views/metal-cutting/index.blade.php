@@ -159,6 +159,15 @@
                     <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
+
+            <!-- Temps par coups -->
+            <div>
+                <label for="punchtime" class="block text-sm font-medium text-slate-100">Temps par coup (sec):</label>
+                <input type="number" name="punchtime" id="punchtime" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ old('punchTime', session('punchTime', 0.2)) }}" required min="0" step="0.1">
+                @error('punchtime')
+                    <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
         <!-- Upload de l'image -->
@@ -282,7 +291,7 @@
                 @endif
                 @if(session('hitcount'))
                     <div class="bg-slate-600 p-4 rounded-lg  border border-gray-200 mb-6 shadow-sm">
-                        <p class="text-lg font-medium">{{ session('hitcount') }} Coups</p>
+                        <p class="text-lg font-medium">{{ session('hitcount') }} Coups x {{ session('punchtime') }} sec = {{ round(session('hitcount') *session('punchtime')/60,2) }} mn</p>
                     </div>
                 @endif
             </div>

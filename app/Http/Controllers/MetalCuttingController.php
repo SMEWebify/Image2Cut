@@ -46,6 +46,7 @@ class MetalCuttingController extends Controller
             'ignoreThreshold' => 'required|numeric|min:0|max:100',
             'alignment' => 'required|in:straight,diagonal' ,
             'pen' => 'required|integer|between:1,16',
+            'punchtime' => 'required|numeric|min:0',
         ]);
 
         $part_size_x = $request->input('part_size_x');
@@ -59,6 +60,7 @@ class MetalCuttingController extends Controller
         $ignoreThreshold = $request->input('ignoreThreshold');
         $alignment = $request->input('alignment');
         $pen = $request->input('pen');
+        $punchtime = $request->input('punchtime');
         
         // Vérifier si une image a été uploadée
         if ($request->hasFile('image')) {
@@ -120,6 +122,7 @@ class MetalCuttingController extends Controller
                                 ->with('ignoreThreshold', $ignoreThreshold) 
                                 ->with('partSizeY', $partSizeY) 
                                 ->with('pen', $pen) 
+                                ->with('punchtime', $punchtime)
                                 ->with('success', 'Image processée avec succès.')
                                 ->with('imageUrl', $result['imagePath'])
                                 ->with('dxfPath', $dxfFilename)
