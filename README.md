@@ -11,8 +11,11 @@ Fonctionnalités
 
 - 💡 Utilisation industrielle : Solution parfaite pour les applications de découpe dans l’industrie du travail des métaux.
 
+- 🖨️ Génération de fichiers DXF et GCode : Exportez vos motifs en fichiers DXF ou GCode, directement utilisables pour vos machines CNC ou découpe laser.
+
 ### Formulaire de conversion
-![image](https://github.com/user-attachments/assets/f058097e-8add-4b6f-8ef5-fb23b1bce620)
+![image](https://github.com/user-attachments/assets/635e11c7-ca06-4396-bf0b-b67eff82bb80)
+
 ### Résultat du traitement
 ![image](https://github.com/user-attachments/assets/c5c88ce6-572d-4f44-9d19-f2d3645b2525)
 
