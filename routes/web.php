@@ -3,10 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\MetalCuttingController;
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
-Route::get('/', [MetalCuttingController::class, 'index'])->name('metal-cutting.index');
-Route::post('/', [MetalCuttingController::class, 'process'])->name('metal-cutting.process');
+Route::get('/', [WelcomeController::class, 'index'])->name('index');
+Route::get('/image-cut', [MetalCuttingController::class, 'index'])->name('image-cut.index');
+Route::post('/image-cut', [MetalCuttingController::class, 'process'])->name('image-cut.process');

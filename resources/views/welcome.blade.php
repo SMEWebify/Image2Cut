@@ -76,7 +76,7 @@
     <div class="container">
         <h1>Welcome to Image2Cut</h1>
         <p>Votre générateur de modèles de découpe de personnalisés</p>
-        <a href="/">
+        <a href="/image-cut">
             <button class="enter-btn">Enter</button>
         </a>
         <a href="https://github.com/SMEWebify/Image2Cut" class="github-link" target="_blank">Voir sur GitHub</a>

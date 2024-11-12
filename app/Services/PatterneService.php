@@ -27,7 +27,7 @@ class PatterneService
         $this->filterService  = $filterService ;
     }
 
-    public function generatePattern($partSizeX, $numberOfTools, $minToolDiameter, $maxToolDiameter, $imagePath, $shape, $fade, $alignment = 'straight', $angle = null, $ignoreThreshold, $espace, $pen, $exportDXF=false)
+    public function generatePattern($partSizeX, $numberOfTools, $minToolDiameter, $maxToolDiameter, $imagePath, $shape, $fade, $invert, $alignment = 'straight', $angle = null, $ignoreThreshold, $espace, $pen, $exportDXF=false)
     {
         // Détecter le type MIME de l'image d'entrée pour obtenir les dimensions
         $imageInfo = getimagesize($imagePath);
@@ -93,6 +93,9 @@ class PatterneService
 
         // Variables pour ajuster la densité du motif
         $spacing = $espace; // Espace entre chaque forme
+        if($shape === 'rectangle'){
+            $spacing += $maxToolDiameter; // si c'est rectangle on double la valeur X pour éviter la superposition
+        }
 
         for ($y = 0; $y < imagesy($resizedImage); $y += $spacing) {
             // Vérification du mode d'alignement
@@ -102,9 +105,9 @@ class PatterneService
                     // Tracer des formes sur les colonnes paires
                     for ($x = 0; $x < imagesx($resizedImage); $x += ($spacing * 2)) {
                         // Récupérer la couleur du pixel et dessiner la forme
-                        $CurrenttoolSize = $this->imageService->drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, $positions, $angle, $ignoreThreshold);
-                        $this->dxfService->drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, $dxfpositions, $angle , $ignoreThreshold,$pen);
-                        $this->gcodeService->drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, $gCodepositions, $angle , $ignoreThreshold);
+                        $CurrenttoolSize = $this->imageService->drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, $positions, $angle, $ignoreThreshold, $invert);
+                        $this->dxfService->drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, $dxfpositions, $angle , $ignoreThreshold, $invert,$pen);
+                        $this->gcodeService->drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, $gCodepositions, $angle , $ignoreThreshold, $invert);
                     
                         if(isset($CurrenttoolSize) ){
                             $hitcount++;
@@ -117,9 +120,9 @@ class PatterneService
                     // Si on est sur une ligne impaire, tracer des formes sur les colonnes impaires
                     for ($x = $spacing; $x < imagesx($resizedImage); $x += ($spacing * 2)) {
                         // Récupérer la couleur du pixel et dessiner la forme
-                        $CurrenttoolSize = $this->imageService->drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, $positions, $angle, $ignoreThreshold);
-                        $this->dxfService->drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, $dxfpositions, $angle , $ignoreThreshold, $pen);
-                        $this->gcodeService->drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, $gCodepositions, $angle , $ignoreThreshold);
+                        $CurrenttoolSize = $this->imageService->drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, $positions, $angle, $ignoreThreshold, $invert);
+                        $this->dxfService->drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, $dxfpositions, $angle , $ignoreThreshold, $invert, $pen);
+                        $this->gcodeService->drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, $gCodepositions, $angle , $ignoreThreshold, $invert);
                 
                         if(isset($CurrenttoolSize)) {
                             $hitcount++;
@@ -133,9 +136,9 @@ class PatterneService
                 // Mode "straight" : dessiner les formes de manière régulière
                 for ($x = 0; $x < imagesx($resizedImage); $x += $spacing) {
                     // Récupérer la couleur du pixel et dessiner la forme
-                    $CurrenttoolSize = $this->imageService->drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, $positions, $angle, $ignoreThreshold);
-                    $this->dxfService->drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, $dxfpositions, $angle , $ignoreThreshold, $pen);
-                    $this->gcodeService->drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, $gCodepositions, $angle , $ignoreThreshold);
+                    $CurrenttoolSize = $this->imageService->drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, $positions, $angle, $ignoreThreshold, $invert);
+                    $this->dxfService->drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, $dxfpositions, $angle , $ignoreThreshold, $invert, $pen);
+                    $this->gcodeService->drawShapeAtPositionGCode($resizedImage, $x, $y, $toolSizes, $shape, $gCodepositions, $angle , $ignoreThreshold, $invert);
                     
                     if(isset($CurrenttoolSize)) {
                         $hitcount++;

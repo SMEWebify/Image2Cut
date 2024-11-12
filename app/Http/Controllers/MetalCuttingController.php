@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\DxfService;
 use Illuminate\Http\Request;
 use App\Services\ImageService;
 use App\Services\FunctionService;
@@ -27,7 +26,7 @@ class MetalCuttingController extends Controller
     // Affiche le formulaire
     public function index()
     {
-        return view('metal-cutting.index');
+        return view('image-cut.index');
     }
 
     // Traite les données du formulaire et génère l'image
@@ -40,7 +39,7 @@ class MetalCuttingController extends Controller
             'min_tool_diameter' => 'required|numeric|min:1',
             'max_tool_diameter' => 'required|numeric|gt:min_tool_diameter',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Upload image
-            'shape' => 'required|in:circle,square,rectangle,triangle,random',
+            'shape' => 'required|in:circle,square,rectangle,triangle,hexagon,random',
             'angle' => 'required|numeric|min:0|max:360',
             'espace' => 'required|numeric|min:2|gt:max_tool_diameter',
             'ignoreThreshold' => 'required|numeric|min:0|max:100',
@@ -57,6 +56,7 @@ class MetalCuttingController extends Controller
         $angle = $request->input('angle');
         $espace = $request->input('espace');
         $fade = $request->has('fade');
+        $invert = $request->has('invert');
         $ignoreThreshold = $request->input('ignoreThreshold');
         $alignment = $request->input('alignment');
         $pen = $request->input('pen');
@@ -86,7 +86,8 @@ class MetalCuttingController extends Controller
                                                             $maxToolDiameter, 
                                                             $fullImagePath, 
                                                             $shape, 
-                                                            $fade,  
+                                                            $fade,
+                                                            $invert,  
                                                             $alignment, 
                                                             $angle, 
                                                             $ignoreThreshold, 
@@ -110,7 +111,7 @@ class MetalCuttingController extends Controller
             $partSizeY = $result['partSizeY'];
 
             // Rediriger avec l'URL du pattern généré
-            return redirect()->route('metal-cutting.index')
+            return redirect()->route('image-cut.index')
                                 ->withInput(input: $validatedData)
                                 ->with('generateTools', $generateTools) 
                                 ->with('usedTools', $usedTools) 
@@ -118,7 +119,8 @@ class MetalCuttingController extends Controller
                                 ->with('shape', $shape)
                                 ->with('angle', $angle) 
                                 ->with('espace', $espace) 
-                                ->with('fade', $fade) 
+                                ->with('fade', $fade)
+                                ->with('invert', $invert)
                                 ->with('ignoreThreshold', $ignoreThreshold) 
                                 ->with('partSizeY', $partSizeY) 
                                 ->with('pen', $pen) 
@@ -130,6 +132,6 @@ class MetalCuttingController extends Controller
                                 ->with('originalImageUrl', $publicImageUrl);
         }
     
-        return redirect()->route('metal-cutting.index')->with('error', 'Aucune image n\'a été uploadée.');
+        return redirect()->route('image-cut.index')->with('error', 'Aucune image n\'a été uploadée.');
     }
 }

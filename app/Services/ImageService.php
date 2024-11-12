@@ -12,7 +12,7 @@ class ImageService
         $this->functionService  = $functionService ;
     }
 
-    public function drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold) {
+    public function drawShapeAtPosition($resizedImage, $newImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold, $invert) {
         
         // Vérifier que $x et $y sont dans les limites de l'image redimensionnée
         if ($x >= imagesx($resizedImage) || $y >= imagesy($resizedImage)) {
@@ -22,12 +22,20 @@ class ImageService
         $grayValue = imagecolorat($resizedImage, $x, $y) & 0xFF; // Extraire la composante grise
     
         // Ignorer les pixels très sombres
-        if ($grayValue < $ignoreThreshold) {
-            return;
+        if ($invert) {
+            // Ignorer les pixels très clairs si on inverse la logique
+            if ($grayValue > (255 - $ignoreThreshold)) {
+                return;
+            }
+        } else {
+            // Ignorer les pixels très sombres (logique normale)
+            if ($grayValue < $ignoreThreshold) {
+                return;
+            }
         }
     
         // Mapper la nuance de gris sur une taille d'outil dans le tableau généré
-        $toolSize = $this->functionService->mapGrayToToolSize($grayValue, $toolSizes);
+        $toolSize = $this->functionService->mapGrayToToolSize($grayValue, $toolSizes, $invert);
     
         // Vérifier si l'outil est trop proche des bords pour éviter de dessiner hors de l'image
         if ($x - $toolSize / 2 < 0 || $x + $toolSize / 2 > imagesx($resizedImage) || $y - $toolSize / 2 < 0 || $y + $toolSize / 2 > imagesy($resizedImage)) {
@@ -66,6 +74,9 @@ class ImageService
             case 'square':
                 imagefilledrectangle($tempImage, 0, 0, $toolSize, $toolSize, $white);
                 break;
+            case 'rectangle':
+                    imagefilledrectangle($tempImage, 0, 0, $toolSize*2, $toolSize, $white);
+                    break;
             case 'triangle':
                 $points = [
                     $toolSize/2, 0, // Sommet supérieur
@@ -74,6 +85,12 @@ class ImageService
                 ];
                 imagefilledpolygon($tempImage, $points, 3, $white);
                 break;
+            case 'hexagon':
+                // Calcul des points pour un hexagone
+                $points = $this->functionService->calculateHexagonPoints($toolSize);
+                imagefilledpolygon($tempImage, $points, 6, $white);
+                break;
+            
         }
     
         // Appliquer la rotation à l'image temporaire contenant la forme

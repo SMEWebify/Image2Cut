@@ -5,11 +5,18 @@ namespace App\Services;
 class FunctionService
 {
 
-    public function mapGrayToToolSize($grayValue, $toolSizes)
+    public function mapGrayToToolSize($grayValue, $toolSizes, $invert = false)
     {
-        // Mapper la valeur grise à une taille d'outil
-        $index = (int) ($grayValue / 255 * (count($toolSizes) - 1)); // Calculer l'indice en fonction de la nuance de gris
-        return $toolSizes[$index]; // Retourner la taille d'outil correspondante
+        // Calculer l'indice en fonction de la nuance de gris
+        $index = (int) ($grayValue / 255 * (count($toolSizes) - 1));
+    
+        // Si l'inversion est activée, inverser l'indice
+        if ($invert) {
+            $index = (count($toolSizes) - 1) - $index; // Inverser l'indice
+        }
+    
+        // Retourner la taille d'outil correspondante
+        return $toolSizes[$index];
     }
     
     public function generateToolSizes($numberOfTools, $minToolDiameter, $maxToolDiameter)
@@ -40,6 +47,26 @@ class FunctionService
             }
         }
         return false; // Aucune forme ne se chevauche
+    }
+
+    public function calculateHexagonPoints($toolSize)
+    {
+        $halfSize = $toolSize / 2;
+        $radius = $toolSize / 2; // Rayon de l'hexagone
+    
+        // Points pour un hexagone régulier (angle entre chaque point : 60 degrés)
+        $points = [];
+        for ($i = 0; $i < 6; $i++) {
+            // Calculer les angles pour chaque sommet de l'hexagone
+            $angle = deg2rad(60 * $i);
+            // Calculer les coordonnées en fonction du rayon et de l'angle
+            $x = $halfSize + $radius * cos($angle); // Décalage en X
+            $y = $halfSize + $radius * sin($angle); // Décalage en Y
+            $points[] = $x;
+            $points[] = $y;
+        }
+    
+        return $points;
     }
 
 }

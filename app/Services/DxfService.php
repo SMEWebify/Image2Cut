@@ -29,7 +29,7 @@ class DxfService
     }
 
     // Dessine une forme à une position donnée dans le fichier DXF
-    public function drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold, $pen)
+    public function drawShapeAtPositionDXF($resizedImage, $x, $y, $toolSizes, $shape, &$positions, $angle = null, $ignoreThreshold, $invert, $pen)
     {
 
         // Vérifier que $x et $y sont dans les limites de l'image redimensionnée
@@ -40,12 +40,20 @@ class DxfService
         $grayValue = imagecolorat($resizedImage, $x, $y) & 0xFF; // Extraire la composante grise
     
         // Ignorer les pixels très sombres
-        if ($grayValue < $ignoreThreshold) {
-            return;
+        if ($invert) {
+            // Ignorer les pixels très clairs si on inverse la logique
+            if ($grayValue > (255 - $ignoreThreshold)) {
+                return;
+            }
+        } else {
+            // Ignorer les pixels très sombres (logique normale)
+            if ($grayValue < $ignoreThreshold) {
+                return;
+            }
         }
-    
+
         // Mapper la nuance de gris sur une taille d'outil dans le tableau généré
-        $toolSize = $this->functionService->mapGrayToToolSize($grayValue, $toolSizes);
+        $toolSize = $this->functionService->mapGrayToToolSize($grayValue, $toolSizes, $invert);
     
         // Vérifier si l'outil est trop proche des bords pour éviter de dessiner hors de l'image
         if ($x - $toolSize / 2 < 0 || $x + $toolSize / 2 > imagesx($resizedImage) || $y - $toolSize / 2 < 0 || $y + $toolSize / 2 > imagesy($resizedImage)) {
@@ -79,8 +87,16 @@ class DxfService
             case 'square':
                 $this->writeSquareToDXF($x, -$y, $toolSize, $angle, $pen);
                 break;
+            case 'rectangle':
+                $this->writeRectangleToDXF($x, -$y, $toolSize*2, $toolSize,$angle, $pen);
+                break;
             case 'triangle':
-                $this->writeTriangleeToDXF($x, -$y, $toolSize, $angle, $pen);
+                $this->writeTriangleToDXF($x, -$y, $toolSize, $angle, $pen);
+                break;
+            case 'hexagon':
+                // Calcul des points pour un hexagone
+                $points = $this->functionService->calculateHexagonPoints($toolSize);
+                $this->writeHexagonToDXF($x, -$y, $toolSize, $angle, $pen);
                 break;
         }
         
@@ -107,7 +123,7 @@ class DxfService
         fwrite($this->dxfFile, "0"); // Fin de l'entité
     }
 
-    private function writeSquareToDXF($x, $y, $size, $angle, $pen) {
+    private function writeSquareToDXF($x, $y, $size, $angle, $pen) { 
         // Génère un carré au format DXF (les coordonnées des 4 points après rotation)
         $halfSize = $size / 2;
     
@@ -123,7 +139,24 @@ class DxfService
         return $this->generateDXFPolygon($points, $pen);
     }
 
-    private function  writeTriangleeToDXF($x, $y, $size, $angle, $pen) {
+    private function writeRectangleToDXF($x, $y, $width, $height, $angle, $pen) {
+        // Génère un rectangle au format DXF (les coordonnées des 4 points après rotation)
+        $halfWidth = $width / 2;
+        $halfHeight = $height / 2;
+        
+        // Calcul des points avec rotation
+        $points = $this->rotatePoints([
+            ['x' => $x - $halfWidth, 'y' => $y - $halfHeight], // coin supérieur gauche
+            ['x' => $x + $halfWidth, 'y' => $y - $halfHeight], // coin supérieur droit
+            ['x' => $x + $halfWidth, 'y' => $y + $halfHeight], // coin inférieur droit
+            ['x' => $x - $halfWidth, 'y' => $y + $halfHeight], // coin inférieur gauche
+            ['x' => $x - $halfWidth, 'y' => $y - $halfHeight], // retour au coin supérieur gauche
+        ], $x, $y, $angle);
+
+        return $this->generateDXFPolygon($points, $pen);
+    }
+
+    private function  writeTriangleToDXF($x, $y, $size, $angle, $pen) {
         // Génère un triangle au format DXF (les coordonnées des 3 points après rotation)
         $halfSize = $size / 2;
         $points = [
@@ -136,6 +169,33 @@ class DxfService
         $rotatedPoints = $this->rotatePoints($points, $x, $y, $angle);
     
         return $this->generateDXFPolygon($rotatedPoints, $pen);
+    }
+
+    private function writeHexagonToDXF($x, $y, $toolSize, $angle, $pen) {
+        // Calcul des points de l'hexagone
+        $points = $this->calculateHexagonPoints($x, $y, $toolSize);
+        
+        // Appliquer la rotation aux points
+        $rotatedPoints = $this->rotatePoints($points, $x, $y, $angle);
+    
+        // Générer l'hexagone en DXF avec les points tournés
+        return $this->generateDXFPolygon($rotatedPoints, $pen);
+    }
+
+    public function calculateHexagonPoints($x, $y, $toolSize) {
+        $radius = $toolSize / 2; // Le rayon du cercle circonscrit
+        $angleStep = 60; // Chaque angle entre les sommets est de 60 degrés
+
+        $points = [];
+        for ($i = 0; $i < 7; $i++) {
+            $angle = deg2rad($i * $angleStep); // Convertir l'angle en radians
+            $points[] = [
+                'x' => $x + $radius * cos($angle), // Calcul de la coordonnée x
+                'y' => $y + $radius * sin($angle)  // Calcul de la coordonnée y
+            ];
+        }
+
+        return $points;
     }
 
     private function generateDXFPolygon($points, $pen) {

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class=" mx-auto px-4 bg-slate-500">
+<div class=" mx-auto px-4">
     <h1 class="text-4xl font-bold text-center my-6 text-slate-100">
         Image 2 cut
     </h1>
 
-    <form action="{{ route('metal-cutting.process') }}" method="POST" enctype="multipart/form-data" class="bg-slate-800 shadow-lg rounded-lg p-6 space-y-6">
+    <form action="{{ route('image-cut.process') }}" method="POST" enctype="multipart/form-data" class="bg-slate-800 shadow-lg rounded-lg p-6 space-y-6">
         @csrf
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Taille de la pièce (X) -->
@@ -21,7 +21,7 @@
             @if(session('partSizeY'))
             <div>
                 <label for="part_size_y" class="block text-sm font-medium text-slate-300">Largeur (Y) en mm :</label>
-                <input type="number" name="part_size_x" id="part_size_x" class="mt-1 block w-full bg-slate-900 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ session('partSizeY') }}" disabled>
+                <input type="number" name="part_size_y" id="part_size_y" class="mt-1 block w-full bg-slate-900 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" value="{{ session('partSizeY') }}" disabled>
             </div>
             @endif
         </div>
@@ -35,6 +35,7 @@
                     <option value="square" @if(old('shape', session('shape')) == 'square') selected @endif>Carré</option>
                     <option value="rectangle" @if(old('shape', session('shape')) == 'rectangle') selected @endif>Rectangle</option>
                     <option value="triangle" @if(old('shape', session('shape')) == 'triangle') selected @endif>Triangle</option>
+                    <option value="hexagon" @if(old('shape', session('shape')) == 'hexagon') selected @endif>Hexagone</option>
                     <option value="random" @if(old('shape', session('shape')) == 'random') selected @endif>Random</option>
                 </select>
                 @error('shape')
@@ -151,6 +152,14 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Ajout du fondu dégrader  -->
+            <div class="flex items-center space-x-3">
+                <input type="checkbox" id="invert" name="invert" value="1" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" @if(session('invert')) checked @endif>
+                <label for="invert" class="text-sm font-medium text-slate-100">Inverser la logique</label>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Couleur de sortie du dxf -->
             <div>
                 <label for="pen" class="block text-sm font-medium text-slate-100">Couleur du dxf (1-16) :</label>
@@ -172,7 +181,7 @@
 
         <!-- Upload de l'image -->
         <div>
-            <label for="image" class="block text-sm font-medium text-slate-100">Télécharger l'image à découper :</label>
+            <label for="image" class="block text-sm font-medium text-slate-100">Télécharger l'image à découper (jpeg,png,jpg | 2 Mo max):</label>
             <input type="file" name="image" id="image" class="mt-1 block w-full bg-slate-700 text-slate-100 border border-slate-600 rounded-lg py-2 px-3 focus:ring-slate-500 focus:border-slate-500" required>
             @error('image')
                 <p class="text-lime-400 text-xs mt-1">{{ $message }}</p>
@@ -274,6 +283,8 @@
                     <div class="bg-lime-500 text-lime-700 p-4 rounded-lg border border-lime-300 shadow-sm mb-6">
                         <p class="text-lg font-medium">{{ session('success') }}</p>
                     </div>
+                @else
+                
                 @endif
                 @if(session('hitcount'))
                     <div class="bg-slate-600 p-4 rounded-lg  border border-gray-200 mb-6 shadow-sm">
